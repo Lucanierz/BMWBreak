@@ -85,7 +85,7 @@ def fixlook(p):
 
 def check_collision(p, c):
     """detects collision with other cars and moves accordingly"""
-    if c[p]:
+    if c[1]:
         global pos
         if p == 4:
             keyboard.press(Key.left)
@@ -106,14 +106,13 @@ if __name__ == '__main__':
     # start_game_()
     while True:
         # print(pos)
-        time.sleep(0)
         print(pos)
-        col = [(255, 0, 0), (255, 0, 0), (255, 0, 0), (255, 0, 0), (255, 0, 0)]
+        col = [(255, 0, 0), (255, 0, 0), (255, 0, 0)]
         sct_img = sct.grab(mon)
         img = np.array(sct_img)
         frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
         headlight = {
-            'x': 485 * fac,
+            'x': 483 * fac,
             'y': 402 * fac,
             'w': 10,
             'h': 10,
@@ -138,27 +137,24 @@ if __name__ == '__main__':
         """
         parts = [
             frame[headlight['y']:headlight['y'] + headlight['h'],
-            headlight['x'] - headlight['d'] * 2:(headlight['x'] + headlight['w']) - headlight['d'] * 2],
-            frame[headlight['y']:headlight['y'] + headlight['h'],
             headlight['x'] - headlight['d']:(headlight['x'] + headlight['w']) - headlight['d']],
             frame[headlight['y']:headlight['y'] + headlight['h'],
             headlight['x']:headlight['x'] + headlight['w']],
             frame[headlight['y']:headlight['y'] + headlight['h'],
             headlight['x'] + headlight['d']:(headlight['x'] + headlight['w']) + headlight['d']],
-            frame[headlight['y']:headlight['y'] + headlight['h'],
-            headlight['x'] + headlight['d'] * 2:(headlight['x'] + headlight['w']) + headlight['d'] * 2]
         ]
-        for i in range(5):
+        for i in range(3):
             average = cv2.mean(cv2.inRange(parts[i], lowcolor, highcolor))[0]
             if average == 0:
                 cars[i] = False
                 col[i] = (255, 0, 0)
             else:
                 cars[i] = True
+                print(cv2.mean(cv2.inRange(parts[i], lowcolor, highcolor))[0])
                 col[i] = (0, 0, 255)
 
         if True in cars:
-            print(int(cars[0]), int(cars[1]), int(cars[2]), int(cars[3]), int(cars[4]))
+            print(int(cars[0]), int(cars[1]), int(cars[2]))
 
         if not pressed:
             if check_collision(pos, cars):
@@ -175,19 +171,13 @@ if __name__ == '__main__':
         headlight_pos = tupop((0.97, 1.32), (1000, 610), 2)
         headlight_size = (10, 10)
         headlight_dist = 0.11 * 1000
-        cv2.rectangle(frame, headlight_pos, tupop(headlight_pos, headlight_size, 0), col[2], 2)
+        cv2.rectangle(frame, headlight_pos, tupop(headlight_pos, headlight_size, 0), col[1], 2)
         cv2.rectangle(frame,
                       tupop(headlight_pos, (headlight_dist, 0), 1),
-                      tupop(tupop(headlight_pos, (headlight_dist, 0), 1), headlight_size, 0), col[1], 2)
-        cv2.rectangle(frame,
-                      tupop(headlight_pos, (headlight_dist * 2, 0), 1),
-                      tupop(tupop(headlight_pos, (headlight_dist * 2, 0), 1), headlight_size, 0), col[0], 2)
+                      tupop(tupop(headlight_pos, (headlight_dist, 0), 1), headlight_size, 0), col[0], 2)
         cv2.rectangle(frame,
                       tupop(headlight_pos, (headlight_dist, 0), 0),
-                      tupop(tupop(headlight_pos, (headlight_dist, 0), 0), headlight_size, 0), col[3], 2)
-        cv2.rectangle(frame,
-                      tupop(headlight_pos, (headlight_dist * 2, 0), 0),
-                      tupop(tupop(headlight_pos, (headlight_dist * 2, 0), 0), headlight_size, 0), col[4], 2)
+                      tupop(tupop(headlight_pos, (headlight_dist, 0), 0), headlight_size, 0), col[2], 2)
 
         cv2.namedWindow("sr", cv2.WINDOW_NORMAL)
         cv2.moveWindow("sr", -1440, 0)
