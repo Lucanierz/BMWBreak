@@ -91,7 +91,6 @@ def check_collision(p, c):
             keyboard.press(Key.left)
             pos -= 1
         if p == 0:
-            print("right")
             keyboard.press(Key.right)
             pos += 1
         else:
@@ -103,10 +102,10 @@ def check_collision(p, c):
 
 
 if __name__ == '__main__':
-    # start_game_()
+    start_game_()
     while True:
         # print(pos)
-        print(pos)
+        # print(pos)
         col = [(255, 0, 0), (255, 0, 0), (255, 0, 0)]
         sct_img = sct.grab(mon)
         img = np.array(sct_img)
@@ -150,11 +149,11 @@ if __name__ == '__main__':
                 col[i] = (255, 0, 0)
             else:
                 cars[i] = True
-                print(cv2.mean(cv2.inRange(parts[i], lowcolor, highcolor))[0])
+                # print(cv2.mean(cv2.inRange(parts[i], lowcolor, highcolor))[0])
                 col[i] = (0, 0, 255)
 
-        if True in cars:
-            print(int(cars[0]), int(cars[1]), int(cars[2]))
+        # if True in cars:
+            # print(int(cars[0]), int(cars[1]), int(cars[2]))
 
         if not pressed:
             if check_collision(pos, cars):
